@@ -1,0 +1,3 @@
+# Validating certs ...
+
+open /Applications/Utilities/Keychain\ Access.app ./ssl/server.crt
