@@ -8,6 +8,7 @@
     - OSX: scripts/validate_certificate_OSX.sh
     - UNIX: TODO
 - npm run start
+- npm run _postinstall
 
 # my_front
 

@@ -4,14 +4,14 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -ssl -host my_front.dev",
+    "start": "ng serve -ssl -host my_front.dev -pc proxy.conf.json",
     "start-http": "ng server",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "my__gen-ssl": "./scripts/generate_certificates.sh",
-    "postinstall": "npm run my__gen-ssl"
+    "_postinstall": "npm run my__gen-ssl"
   },
   "private": true,
   "dependencies": {
@@ -23,7 +23,10 @@
     "@angular/platform-browser": "^4.0.0",
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
+    "angular2-notifications": "^0.4.53",
     "core-js": "^2.4.1",
+    "firebase": "^3.7.3",
+    "ng2-translate": "^5.0.0",
     "rxjs": "^5.1.0",
     "zone.js": "^0.8.4"
   },
