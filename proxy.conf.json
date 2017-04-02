@@ -1,8 +1,8 @@
 {
-  "/api": {
-    "target": "https://127.0.0.1:3000",
+  "/api/*": {
+    "target": "https://127.0.0.1:5000",
     "pathRewrite": { "^/api": "/v1" },
     "secure": false,
-    "ws": true
+    "ws": false
   }
 }

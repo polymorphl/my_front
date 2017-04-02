@@ -8,6 +8,7 @@ import { Http, HttpModule } from '@angular/http';
 
 // My dependancies
 // -- i18n
+import { PushNotificationsModule, SimpleNotificationsModule } from 'angular2-notifications';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate';
 // -- i18n Loader for extenal locale
 export function createTranslateLoader(http: Http) {
@@ -26,6 +27,7 @@ import { LanguageService } from './default/services/language.service';
 import { SocketService } from './default/services/socket.service';
 import { AuthService } from './default/services/auth.service';
 import { SharedService } from './default/services/shared.service';
+import { NotificationService } from './default/services/notification.service';
 
 // My local routes
 import { RoutingModule } from './routing.module';
@@ -45,6 +47,10 @@ import { RoutingModule } from './routing.module';
     ReactiveFormsModule,
     HttpModule,
 
+    // Push + Toast
+    PushNotificationsModule,
+    SimpleNotificationsModule,
+
     // i18n module
     TranslateModule.forRoot({
       provide: TranslateLoader,
@@ -60,11 +66,26 @@ import { RoutingModule } from './routing.module';
     LanguageService,
     SocketService,
     SharedService,
-    AuthService
+    AuthService,
+    NotificationService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
-  constructor() {}
+  constructor(private _auth: AuthService, private _language: LanguageService) {
+    this._auth.pingAuth().subscribe(
+      (data)=> {
+        if (!data) {
+          this._language.autoDetectLanguage();
+        } else {
+          this._language.setLanguage(data.settings.language);
+          //this._ns.init();
+          //if(this._router.url == "/home") {
+          //  this._router.navigate(['/profile']);
+          //}
+        }
+      }
+    );
+  }
 }

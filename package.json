@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve -ssl -host my_front.dev",
+    "start": "ng serve -ssl -host my_front.dev -pc proxy.conf.json",
     "start-http": "ng serve -pc proxy.conf.json",
     "build": "ng build",
     "test": "ng test",

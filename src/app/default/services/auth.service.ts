@@ -83,7 +83,7 @@ export class AuthService {
   }
 
   public pingAuth(){
-    return this._http.get('/auth/ping').flatMap((resp) => {
+    return this._http.get('/auth/pingAuth').flatMap((resp) => {
       if(!resp.data.errors){
         this._shared.setData('currentUser', resp.data.payload);
         return this.authResolver(resp.data.payload);
