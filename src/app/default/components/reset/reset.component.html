@@ -1,0 +1,35 @@
+<section class="reset">
+  <form [formGroup]="resetForm" (ngSubmit)="submitForm(resetForm.value, resetForm.valid)">
+    <div class="form-group">
+      <label>{{ 'auth.pass' | translate }}:</label>
+      <input show-hide class="form-control" type="password" placeholder="{{ 'auth.pass' | translate }}" [formControl]="resetForm.controls['pass']">
+      <span class="form-action" (click)="togglePasswordVisibility($event)">
+        <span *ngIf="!showPass" class="icon-eye-open link"></span>
+        <span *ngIf="showPass" class="icon-eye-close link"></span>
+      </span>
+      <div class="form-msgs container" *ngIf="!resetForm.controls['pass'].valid && resetForm.controls['pass'].dirty">
+        <p *ngIf="resetForm.controls['pass'].hasError('required')">
+          {{ 'auth.errors.register.1a' | translate }}
+        </p>
+        <p *ngIf="resetForm.controls['pass'].hasError('minlength') || resetForm.controls['pass'].hasError('maxlength')">
+          {{ 'auth.errors.register.1b' | translate }}
+        </p>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>{{ 'auth.signup.pass2' | translate }}:</label>
+      <input class="form-control" type="password" placeholder="{{ 'auth.pass' | translate }}" [formControl]="resetForm.controls['confirmPass']">
+      <div class="form-msgs container" *ngIf="!resetForm.controls['confirmPass'].valid && resetForm.controls['confirmPass'].dirty">
+        <p *ngIf="resetForm.controls['confirmPass'].hasError('required')">
+          {{ 'auth.errors.register.1c' | translate }}
+        </p>
+      </div>
+      <p *ngIf="resetForm.hasError('nomatch')">
+        {{ 'auth.errors.register.1d' | translate }}
+      </p>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-default"  [disabled]="!resetForm.valid">{{ 'submit' | translate }}</button>
+    </div>
+  </form>
+</section>

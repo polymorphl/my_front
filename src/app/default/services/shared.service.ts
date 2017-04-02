@@ -7,7 +7,7 @@ export class SharedService {
 
   private _observers: Object = {};
   private _data: Object;
-  private _WAITING: string = 'shared_waiting';
+  private PENDING: string = 'my--shared--pending';
 
   constructor() {
     this._data = {};
@@ -17,7 +17,7 @@ export class SharedService {
     this._data[key] = value;
     if(!this._observers[key]){
       this._observers[key] = new BehaviorSubject(this._data[key]).filter((data)=>{
-        return data !== this._WAITING;
+        return data !== this.PENDING;
       });
     }
     this._observers[key].next(value);
@@ -26,14 +26,14 @@ export class SharedService {
   public clearData(key: string): boolean{
     if(this._data[key]){
       delete this._data[key];
-      this._observers[key].next(this._WAITING);
+      this._observers[key].next(this.PENDING);
       return true;
     }
     return false;
   }
 
   public getData (key: string): any {
-    if(this._data[key] !== this._WAITING){
+    if(this._data[key] !== this.PENDING){
       return this._data[key];
     }
     else {
@@ -43,9 +43,9 @@ export class SharedService {
 
   public get(key: string){
     if(!this._observers[key]){
-      this._data[key] = this._WAITING;
+      this._data[key] = this.PENDING;
       this._observers[key] = new BehaviorSubject(this._data[key]).filter((x, idx)=>{
-        let bool = x !== this._WAITING;
+        let bool = x !== this.PENDING;
         return bool;
       });
     }

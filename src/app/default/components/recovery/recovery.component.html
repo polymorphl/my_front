@@ -1,0 +1,18 @@
+<section class="recovery">
+  <form [formGroup]="recoveryForm" (ngSubmit)="submitForm(recoveryForm.value, recoveryForm.valid)" *ngIf="!emailSent">
+    <div class="form-group">
+      <label>{{ 'auth.email' | translate }}:</label>
+      <input class="form-control" type="text" placeholder="{{ 'auth.email' | translate }}" [formControl]="recoveryForm.controls['email']">
+    </div>
+    <div class="form-group">
+      <label>{{ 'auth.acc' | translate }}:</label>
+      <input class="form-control" type="text" placeholder="{{ 'auth.acc' | translate }}" [formControl]="recoveryForm.controls['account']">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-default"  [disabled]="!recoveryForm.valid">{{ 'submit' | translate }}</button>
+    </div>
+  </form>
+  <div *ngIf="emailSent">
+    <h3>{{ 'auth.forgot.sent' | translate }}</h3>
+  </div>
+</section>

@@ -1,0 +1,11 @@
+<h2 class="page-title">{{ 'pages.home' | translate }}</h2>
+<loading-container [loading]="loading">
+  <my-login (isLogged)="handleState($event)"></my-login>
+  <section class="alt-nav">
+    <div>
+      <button (click)="navigateToRecovery()">{{ 'auth.forgot._pass' | translate }}</button>
+      <button (click)="navigateToRegister()">{{ 'auth.signup._' | translate }}</button>
+    </div>
+  </section>
+</loading-container>
+

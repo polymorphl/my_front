@@ -1,21 +1,21 @@
-import {Injectable} from '@angular/core'
-import { Http, Response, Headers, RequestOptions } from '@angular/http'
+import {Injectable} from '@angular/core';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Rx';
 
 @Injectable()
 export class HttpService {
 
-  private _backendUrl:string;
+  private _endpointURL:string;
 
   constructor(private http: Http) {
-    this._backendUrl = '/api'
+    this._endpointURL = '/api'
   }
 
-  private _extractAuthorization(){
+  private extractTokenFromLocalStorage(){
     return localStorage.getItem('tkn');
   }
 
-  private _parseMessages(data){
+  private parseMeta(data){
     if(data.meta.msgs.length > 0){
       data.meta.msgs.forEach((msg)=>{
         // 0: module, 1: type, 2: field, 3: id
@@ -32,20 +32,19 @@ export class HttpService {
     return data;
   }
 
-  private _createAuthorizationHeader(headers: Headers) {
-    let tkn = this._extractAuthorization();
+  private appendAuthorizationHeader(headers: Headers) {
+    let tkn = this.extractTokenFromLocalStorage();
     headers.append('authorization', tkn);
     return headers;
   }
 
-  private _extractResponse(res:any) {
-    let data = this._parseMessages(res.json());
+  private extractResponseObject(res:any) {
+    let data = this.parseMeta(res.json());
     return { headers: res.headers, data: data}
   }
 
-  private _handleError(error:any): Observable<any> {
-    console.info('ERROR - HTTP');
-    console.error(error);
+  private handleError(error:any): Observable<any> {
+    console.info('ERROR - from HTTP Service', error);
     try {
       return Observable.throw(error.json().meta);
     } catch (e) {
@@ -55,29 +54,28 @@ export class HttpService {
 
   public get(url: string): Observable<any> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers = this._createAuthorizationHeader(headers);
+    headers = this.appendAuthorizationHeader(headers);
     let options = new RequestOptions({ headers: headers, withCredentials: true });
-    return this.http.get(`${this._backendUrl}${url}`, options)
-      .map((res:Response) => { return this._extractResponse(res); })
-      .catch(this._handleError)
+    return this.http.get(`${this._endpointURL}${url}`, options)
+      .map((res:Response) => { return this.extractResponseObject(res); })
+      .catch(this.handleError)
   }
 
   public post(url: string, data: any): Observable<any> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers = this._createAuthorizationHeader(headers);
+    headers = this.appendAuthorizationHeader(headers);
     let options = new RequestOptions({ headers: headers, withCredentials: true });
-    return this.http.post(`${this._backendUrl}${url}`, data, options)
-      .map((res:Response) => { return this._extractResponse(res); })
-      .catch(this._handleError)
+    return this.http.post(`${this._endpointURL}${url}`, data, options)
+      .map((res:Response) => { return this.extractResponseObject(res); })
+      .catch(this.handleError)
   }
 
   public delete(url: string): Observable<any> {
     let headers = new Headers({ 'Content-Type': 'application/json' });
-    headers = this._createAuthorizationHeader(headers);
-    // console.log('DELETE - HEADERS', JSON.stringify(headers, null, 2));
+    headers = this.appendAuthorizationHeader(headers);
     let options = new RequestOptions({ headers: headers, withCredentials: true });
-    return this.http.delete(`${this._backendUrl}${url}`, options)
-      .map((res:Response) => { return this._extractResponse(res); })
-      .catch(this._handleError)
+    return this.http.delete(`${this._endpointURL}${url}`, options)
+      .map((res:Response) => { return this.extractResponseObject(res); })
+      .catch(this.handleError)
   }
 }

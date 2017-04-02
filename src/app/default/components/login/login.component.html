@@ -1,0 +1,16 @@
+<section class="login">
+  <form [formGroup]="loginForm" (ngSubmit)="submitForm(loginForm.value, loginForm.valid)" *ngIf="!isAuth()">
+    <div class="form-group">
+      <label>{{ 'auth.email' | translate }}:</label>
+      <input class="form-control" type="text" placeholder="{{ 'auth.email' | translate }}" [formControl]="email">
+    </div>
+    <div class="form-group">
+      <label>{{ 'auth.pass' | translate }}:</label>
+      <input class="form-control" type="password" placeholder="{{ 'auth.pass' | translate }}" [formControl]="password">
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-default"  [disabled]="!loginForm.valid">{{ 'submit' | translate }}</button>
+    </div>
+  </form>
+  <div *ngIf="isAuth()"> {{ 'auth.login.already' | translate }}</div>
+</section>

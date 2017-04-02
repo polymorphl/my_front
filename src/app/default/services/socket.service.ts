@@ -3,10 +3,13 @@ import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
 import * as io from 'socket.io-client';
 
+import { SocketURL } from '../config/constants';
+
 @Injectable()
-export class SocketService{
-  private url = 'https://127.0.0.1:3000'; // TODO: Add dynamic url
-  private socket: any;
+export class SocketService {
+
+  private _url = SocketURL;
+  private _socket: any;
   private _rooms: Object = {};
   private _options = {
     secure: false,
@@ -16,89 +19,89 @@ export class SocketService{
     query: { token: null }
   };
 
-  constructor(){
+  constructor() { }
 
-  }
-
-  private _accessTkn() {
+  private extractToken() {
     return localStorage.getItem('tkn');
   }
 
-
-  init(){
-    this.socket.on('disconnect', ()=>{
-      console.error('disconnected from socket');
+  private initialize(){
+    this._socket.on('disconnect', ()=>{
+      console.error('[WebSocket]: disconnected from socket');
     });
-    this.socket.on('error', (err) => {
-      console.info('[WebSocket]: onError');
-      console.error(err);
+    this._socket.on('error', (err) => {
+      console.error('[WebSocket]: onError', err);
     });
   }
 
-  connect(successCB, errorCB){
-    this.socket = io.connect(this.url, Object.assign({},this._options));
+  public connect(successCB, errorCB){
+    this._socket = io.connect(this._url, Object.assign({},this._options));
     let reconnectPrepared = false;
-    this.socket.on('connect', ()=>{
+    this._socket.on('connect', ()=>{
       if(!reconnectPrepared){ // do only once connection behaviour
-        this.socket.emit('authenticate', {tkn: this._accessTkn()})
+        this._socket.emit('authenticate', {tkn: this.extractToken()})
           .on('authenticated', ()=>{
-            this.init();
+            this.initialize();
             successCB({error:false});
           })
           .on('unauthorized', ()=>{
-            this.socket.disconnect();
+            this._socket.disconnect();
             errorCB({error: true});
           })
           .on('reconnect', ()=>{
             // define only once reconnect behaviour
-            this.socket.emit('authenticate',{tkn: this._accessTkn()});
+            this._socket.emit('authenticate',{tkn: this.extractToken()});
             if(!reconnectPrepared){
               reconnectPrepared = true;
-              this.socket.on('authenticated', ()=>{
-                this.socket.emit('room:join', Object.keys(this._rooms));
+              this._socket.on('authenticated', ()=>{
+                this._socket.emit('room:join', Object.keys(this._rooms));
               });
             }
           });
       }
     });
   }
-  disconnect(){
-    this.socket.disconnect();
+
+  public disconnect(){
+    this._socket.disconnect();
   }
-  emit(tag: string, data: string){
-    this.socket.emit(tag, data);
+
+  public emit(tag: string, data: string){
+    this._socket.emit(tag, data);
   }
-  getSocketStatusStream(){
+
+  public getSocketStatusStream(){
     let observable = Observable.create( observer => {
-      this.socket.on('disconnect', ()=>{
+      this._socket.on('disconnect', ()=>{
         observer.next(false);
       });
-      this.socket.on('connected', ()=>{
+      this._socket.on('connected', ()=>{
         observer.next(true);
       });
-      observer.next(this.socket.connected);
+      observer.next(this._socket.connected);
     });
     return observable;
   }
-  on(tag: string, fn: Function){
-    this.socket.on(tag, fn);
+
+  public on(tag: string, fn: Function){
+    this._socket.on(tag, fn);
     return ()=>{
-      this.socket.removeListener(tag, fn);
+      this._socket.removeListener(tag, fn);
     }
   }
 
-  join(tags: Array<string>): Array<any>{
+  public join(tags: Array<string>):Array<any> {
     let fn;
     // set the update observable stream
     let room = Observable.create( observer => {
-      this.socket.emit('room:join', tags);
+      this._socket.emit('room:join', tags);
       fn = (data) => {
         observer.next(data);
       };
       tags.forEach((tag)=>{
         if(!this._rooms[tag] || this._rooms[tag].length == 0){
           this._rooms[tag] = [];
-          this.socket.on(`${tag}:update`, this.handleRoomUpdate(tag))
+          this._socket.on(`${tag}:update`, this.handleRoomUpdate(tag))
         }
         this._rooms[tag].push(fn);
       });
@@ -109,14 +112,14 @@ export class SocketService{
       tags.forEach((tag)=>{
         this._rooms[tag].splice(this._rooms[tag].indexOf(fn), 1);
         if(this._rooms[tag].length == 0){
-          this.socket.emit('room:leave', tag);
-          this.socket.removeAllListeners(`${tag}:update`)
+          this._socket.emit('room:leave', tag);
+          this._socket.removeAllListeners(`${tag}:update`)
         }
       });
     }];
   }
 
-  private handleRoomUpdate(tag){
+  public handleRoomUpdate(tag){
     return (data)=>{
       this._rooms[tag].forEach(function(fn){
         fn(data);
