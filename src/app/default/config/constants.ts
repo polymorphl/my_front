@@ -3,4 +3,8 @@ function normalizeSockerURL() {
   return localeDevURL;
 }
 
-export let SocketURL = normalizeSockerURL();
+let SocketURL = normalizeSockerURL();
+
+export {
+  SocketURL
+}

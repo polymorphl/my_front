@@ -2,7 +2,7 @@ import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { passwordValidator } from '../../validators';
+import { passwordValidator } from '../../validators/password.validator';
 
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';

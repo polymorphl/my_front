@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from "@angular/router";
 import { Http, HttpModule } from '@angular/http';
@@ -17,14 +17,18 @@ export function createTranslateLoader(http: Http) {
 // -----------------------------------
 
 // My Local component
-import { AppComponent } from './app.component';
+import { AppComponent } from './default/app.component';
+import { HomePageComponent } from './default/pages/home/home-page.component';
 
 // My services
-import { HttpService } from './services/http.service';
-import { LanguageService } from './services/language.service';
-import { SocketService } from './services/socket.service';
-import { AuthService } from './services/auth.service';
-import { SharedService } from './services/shared.service';
+import { HttpService } from './default/services/http.service';
+import { LanguageService } from './default/services/language.service';
+import { SocketService } from './default/services/socket.service';
+import { AuthService } from './default/services/auth.service';
+import { SharedService } from './default/services/shared.service';
+
+// My local routes
+import { RoutingModule } from './routing.module';
 
 // -----------------------------------
 
@@ -32,7 +36,8 @@ import { SharedService } from './services/shared.service';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomePageComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +50,10 @@ import { SharedService } from './services/shared.service';
       provide: TranslateLoader,
       useFactory: (createTranslateLoader),
       deps: [Http]
-    })
+    }),
+
+    // Routing
+    RoutingModule
   ],
   providers: [
     HttpService,
@@ -54,7 +62,8 @@ import { SharedService } from './services/shared.service';
     SharedService,
     AuthService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule {
   constructor() {}
