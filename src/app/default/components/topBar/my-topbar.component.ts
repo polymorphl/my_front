@@ -3,19 +3,23 @@ import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { SocketService } from '../../services/socket.service';
 import { SharedService } from '../../services/shared.service';
+import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'my-top-bar',
-  templateUrl: './topbar.component.html'
+  templateUrl: './my-topbar.component.html'
 })
-export class AppBarComponent implements OnInit {
-  @Input() appName;
-  private user: any;
+export class TopBarComponent implements OnInit {
+
+  @Input() appName:string;
+  private user: any; // make interface
   private _isSocketConnected: boolean;
 
-  constructor(private auth: AuthService,
-              private socket: SocketService,
-              private shared: SharedService) {}
+  constructor(private auth: AuthService, private socket: SocketService,
+              private shared: SharedService, private _language: LanguageService) {
+
+  }
+
   ngOnInit() {
     this.shared.get('isLoggedIn').subscribe((loggedIn)=>{
       if(loggedIn){
@@ -26,12 +30,17 @@ export class AppBarComponent implements OnInit {
     });
   }
 
+  handleLanguageState(state) {
+    this._language.updateLanguage(state);
+    // must .subscribe() to watch the observable
+  }
+
   isAuth(): boolean {
     return this.auth.isLoggedIn();
   }
 
   logout() {
-    this.auth.logout().subscribe(() => { console.info('Logout'); });
+    this.auth.logout().subscribe();
   }
 
 }

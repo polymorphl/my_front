@@ -1,18 +1,18 @@
 import { Component, Input, OnDestroy } from "@angular/core";
 
 @Component({
-  selector: 'spinner',
+  selector: 'my-spinner',
   styles: [`
     .folding-cube-spinner {
       position: relative;
       margin: 25px auto;
       width: 40px;
       height: 40px;
-    
+
       -webkit-transform: rotateZ(45deg);
       transform: rotateZ(45deg);
     }
-    
+
     .folding-cube-spinner .cube {
       position: relative;
       float: left;
@@ -22,7 +22,7 @@ import { Component, Input, OnDestroy } from "@angular/core";
       -ms-transform: scale(1.1);
       transform: scale(1.1);
     }
-    
+
     .folding-cube-spinner .cube:before {
       position: absolute;
       top: 0;
@@ -37,37 +37,37 @@ import { Component, Input, OnDestroy } from "@angular/core";
       -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
       animation: sk-foldCubeAngle 2.4s infinite linear both;
     }
-    
+
     .folding-cube-spinner .cube2 {
       -webkit-transform: scale(1.1) rotateZ(90deg);
       transform: scale(1.1) rotateZ(90deg);
     }
-    
+
     .folding-cube-spinner .cube3 {
       -webkit-transform: scale(1.1) rotateZ(180deg);
       transform: scale(1.1) rotateZ(180deg);
     }
-    
+
     .folding-cube-spinner .cube4 {
       -webkit-transform: scale(1.1) rotateZ(270deg);
       transform: scale(1.1) rotateZ(270deg);
     }
-    
+
     .folding-cube-spinner .cube2:before {
       -webkit-animation-delay: 0.3s;
       animation-delay: 0.3s;
     }
-    
+
     .folding-cube-spinner .cube3:before {
       -webkit-animation-delay: 0.6s;
       animation-delay: 0.6s;
     }
-    
+
     .folding-cube-spinner .cube4:before {
       -webkit-animation-delay: 0.9s;
       animation-delay: 0.9s;
     }
-    
+
     @-webkit-keyframes sk-foldCubeAngle {
       0%, 10% {
         -webkit-transform: perspective(140px) rotateX(-180deg);
@@ -85,7 +85,7 @@ import { Component, Input, OnDestroy } from "@angular/core";
         opacity: 0;
       }
     }
-    
+
     @keyframes sk-foldCubeAngle {
       0%, 10% {
         -webkit-transform: perspective(140px) rotateX(-180deg);

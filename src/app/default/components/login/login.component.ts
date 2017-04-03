@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators  } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
@@ -9,7 +9,7 @@ import { ToastService } from '../../services/toast.service';
   templateUrl: './login.component.html'
 })
 export class LoginComponent {
-  @Output() isLogged = new EventEmitter();
+  @Output() hasBeenLogged = new EventEmitter();
 
   loginForm: FormGroup;
 
@@ -28,6 +28,7 @@ export class LoginComponent {
   }
 
   submitForm(formData: any, valid: boolean) {
+    console.log(formData);
     if (valid) {
       let user = {
         email: formData.email,
@@ -35,7 +36,7 @@ export class LoginComponent {
       };
 
       this.auth.login(user).subscribe(
-        (result) => { this.isLogged.emit(true); },
+        (result) => { this.hasBeenLogged.emit(true); },
         (err) => {
           this._toast.popError(err.msgs);
         }

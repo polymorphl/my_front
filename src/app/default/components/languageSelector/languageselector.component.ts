@@ -25,7 +25,7 @@ export class LanguageSelectorComponent implements OnInit {
   private _defaultLanguage: string;
 
   @Input()
-  set defaultLanguage(locale: string) {
+  set defaultLang(locale: string) {
     this._defaultLanguage = locale;
   }
 

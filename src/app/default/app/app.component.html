@@ -1,0 +1,18 @@
+<ng-sidebar-container>
+  <!-- The toast container -->
+  <simple-notifications [options]="optionsToaster"></simple-notifications>
+  <!-- The sidebar -->
+  <ng-sidebar [(opened)]="_opened" closeOnClickOutside="true">
+    <p closeSidebar>Sidebar contents</p>
+  </ng-sidebar>
+
+  <!-- Page content -->
+  <my-top-bar appName="{{appName}}">yo</my-top-bar>
+  <h1>{{title}}</h1>
+  <a routerLink="home" routerLinkActive="active">{{ 'pages.home' | translate }}</a>
+  <a routerLink="lazy" routerLinkActive="active">debug lazy module</a>
+  <button (click)="_toggleSidebar()">Toggle sidebar</button>
+  <!-- Router View -->
+  <router-outlet></router-outlet>
+
+</ng-sidebar-container>

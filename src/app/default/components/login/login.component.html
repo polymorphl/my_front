@@ -2,11 +2,11 @@
   <form [formGroup]="loginForm" (ngSubmit)="submitForm(loginForm.value, loginForm.valid)" *ngIf="!isAuth()">
     <div class="form-group">
       <label>{{ 'auth.email' | translate }}:</label>
-      <input class="form-control" type="text" placeholder="{{ 'auth.email' | translate }}" [formControl]="email">
+      <input class="form-control" type="text" placeholder="{{ 'auth.email' | translate }}" ngControl="email">
     </div>
     <div class="form-group">
       <label>{{ 'auth.pass' | translate }}:</label>
-      <input class="form-control" type="password" placeholder="{{ 'auth.pass' | translate }}" [formControl]="password">
+      <input class="form-control" type="password" placeholder="{{ 'auth.pass' | translate }}" ngControl="password">
     </div>
     <div class="form-group">
       <button type="submit" class="btn btn-default"  [disabled]="!loginForm.valid">{{ 'submit' | translate }}</button>

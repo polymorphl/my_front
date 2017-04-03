@@ -5,20 +5,20 @@ import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-  selector: 'my-recovery',
-  templateUrl: './recovery.component.html'
+  selector: 'my-forgot',
+  templateUrl: './forgot.component.html'
 })
-export class RecoveryComponent {
+export class ForgotComponent {
   @Output() requestPending = new EventEmitter();
 
-  recoveryForm: FormGroup;
+  forgotForm: FormGroup;
   emailSent: boolean;
 
   constructor(fb: FormBuilder,
               private auth: AuthService,
               private _toast: ToastService) {
 
-    this.recoveryForm = fb.group({
+    this.forgotForm = fb.group({
       'email': [null, Validators.required]
     });
     this.emailSent = false;

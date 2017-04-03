@@ -1,0 +1,11 @@
+<div fxFlexLayout="row">
+  <div fxFlex="300px" class="left">
+    <div id="logo" routerLink="home" routerLinkActive="active">
+      <h1>{{appName}}</h1>
+      </div>
+  </div>
+  <div fxFlex class="right">
+    <span *ngIf="!isAuth()"><my-language-selector defaultLang="fr" (changeState)="handleLanguageState($event)"></my-language-selector></span>
+    <button *ngIf="isAuth()" (click)="logout()">{{ 'auth.logout._' | translate }}</button>
+  </div>
+</div>
