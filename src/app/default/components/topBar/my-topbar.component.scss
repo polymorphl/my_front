@@ -1,0 +1,28 @@
+@import "~assets/scss/vars";
+
+.top-bar {
+  box-sizing: border-box;
+  height: $top-bar-height;
+
+
+  #logo {
+    h1 {
+      font-family: "roboto-light";
+      font-size: $top-bar-title-size;
+      color: $top-bar-title-color;
+    }
+  }
+
+  .left, .right {
+    line-height: $top-bar-height;
+  }
+
+  .left {
+    text-align: center;
+  }
+
+  .right {
+    text-align: right;
+    margin-right: 20px;
+  }
+}

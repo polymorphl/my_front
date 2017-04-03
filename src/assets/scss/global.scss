@@ -1,0 +1,11 @@
+@import "./vars";
+@import "./mixins";
+
+@include font("roboto-bold", "Roboto-Bold", "10");
+@include font("roboto-regular", "Roboto-Regular", "11");
+@include font("roboto-light", "Roboto-Light", "12");
+
+body {
+  background: linear-gradient(to right, $bg-c1 0%, $bg-c2 100%);
+  font-family: "roboto-regular", sans-serif;
+}

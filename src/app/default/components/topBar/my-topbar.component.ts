@@ -7,7 +7,8 @@ import { LanguageService } from '../../services/language.service';
 
 @Component({
   selector: 'my-top-bar',
-  templateUrl: './my-topbar.component.html'
+  templateUrl: './my-topbar.component.html',
+  styleUrls: ['./my-topbar.component.scss']
 })
 export class TopBarComponent implements OnInit {
 

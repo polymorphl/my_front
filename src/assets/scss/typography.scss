@@ -1,0 +1,33 @@
+@import "./vars";
+
+h1 {
+  font-family: "roboto-bold";
+  font-size: $global-h1;
+}
+
+h2 {
+  font-size: $global-h2;
+}
+
+h3 {
+  font-size: $global-h3;
+}
+
+h4 {
+  font-size: $global-h4;
+}
+
+h5 {
+  font-size: $global-h5;
+}
+
+h6 {
+  font-size: $global-h6;
+}
+
+a {
+  color: $link-color;
+  &:hover {
+    color: $link-hover-color;
+  }
+}
