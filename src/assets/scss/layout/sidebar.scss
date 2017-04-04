@@ -1,0 +1,48 @@
+@import "../vars";
+
+ng-sidebar-container {
+  width: 100%;
+  height: 100%;
+}
+
+.burger-icon {
+  background: transparent;
+  border: 0.15rem solid white;
+  border-left: 0;
+  border-right: 0;
+  cursor: pointer;
+  font-size: 0;
+  height: 1.5rem;
+  margin-right: 1rem;
+  position: relative;
+  width: 2rem;
+
+  &::after {
+    background: white;
+    content: '';
+    height: 0.15rem;
+    left: 0;
+    margin-top: -0.075rem;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+  }
+}
+
+.ng-sidebar {
+  width: $sidebar-width;
+  background-color: $sidebar-color!important;
+}
+
+.ng-sidebar__content {
+    width: 100%;
+    margin-left: 0;
+  }
+
+@media (min-width: $responsive-breakpoint) {
+  .ng-sidebar__content {
+    width: calc(100% - #{$sidebar-width});
+    margin-left: $sidebar-width!important;
+  }
+}
+

@@ -1,17 +1,25 @@
 // Global
+$responsive-breakpoint: 900px;
 $global-h1: 26px;
 $global-h2: 24px;
 $global-h3: 22px;
 $global-h4: 20px;
 $global-h5: 18px;
 $global-h6: 16px;
-$link-color: green;
-$link-hover-color: red;
 
 // Top bar
 $top-bar-height: 60px;
 $top-bar-title-size: 18px;
 $top-bar-title-color: #fff;
+
+// Links
+$link-color: green;
+$link-hover-color: red;
+
+// Sidebar
+$sidebar-width: 190px;
+$sidebar-color: #dcF;
+$sidebar-border-color: #a00;
 
 // Background
 $bg-c1: #2D266F;

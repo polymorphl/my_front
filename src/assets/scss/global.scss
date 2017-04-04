@@ -5,7 +5,13 @@
 @include font("roboto-regular", "Roboto-Regular", "11");
 @include font("roboto-light", "Roboto-Light", "12");
 
+html {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   background: linear-gradient(to right, $bg-c1 0%, $bg-c2 100%);
   font-family: "roboto-regular", sans-serif;
+  height: 100%;
 }
