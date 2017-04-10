@@ -35,15 +35,18 @@ export class AuthService {
     return observable;
   }
 
-  public login (user: any) {
+  public login (data: any) {
     return this._http.post('/auth', {
-      username: user.nickname,
-      password: user.password
+      email: data.email,
+      password: data.password
     }).flatMap((resp) => {
       localStorage.setItem('tkn', resp.headers.get('authorization'));
       this._shared.setData('currentUser', resp.data.payload);
-      this._language.setLanguage(resp.data.payload.settings.language);
-      this._ns.init();
+      if (resp.data.payload.settings) {
+        this._language.setLanguage(resp.data.payload.settings.language);
+      }
+      // TODO
+      //this._ns.init();
       return this.authResolver(resp.data.payload);
     });
   }
@@ -84,6 +87,7 @@ export class AuthService {
 
   public pingAuth(){
     return this._http.get('/auth/pingAuth').flatMap((resp) => {
+      console.info('pingAuth ... !')
       if(!resp.data.errors){
         this._shared.setData('currentUser', resp.data.payload);
         return this.authResolver(resp.data.payload);

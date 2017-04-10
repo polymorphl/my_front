@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { Observable } from 'rxjs/Observable';
+import { Observable} from 'rxjs/Observable';
 import * as io from 'socket.io-client';
+import {BehaviorSubject} from "rxjs";
 
 import { SocketURL } from '../config/constants';
 
@@ -21,16 +21,16 @@ export class SocketService {
 
   constructor() { }
 
-  private extractToken() {
+  private _extractToken() {
     return localStorage.getItem('tkn');
   }
 
   private initialize(){
     this._socket.on('disconnect', ()=>{
-      console.error('[WebSocket]: disconnected from socket');
+      console.error('[WebSocket]: your are disconnected from the socket');
     });
     this._socket.on('error', (err) => {
-      console.error('[WebSocket]: onError', err);
+      console.error('[WebSocket]: Error', err);
     });
   }
 
@@ -39,7 +39,7 @@ export class SocketService {
     let reconnectPrepared = false;
     this._socket.on('connect', ()=>{
       if(!reconnectPrepared){ // do only once connection behaviour
-        this._socket.emit('authenticate', {tkn: this.extractToken()})
+        this._socket.emit('authenticate', {tkn: this._extractToken()})
           .on('authenticated', ()=>{
             this.initialize();
             successCB({error:false});
@@ -50,7 +50,7 @@ export class SocketService {
           })
           .on('reconnect', ()=>{
             // define only once reconnect behaviour
-            this._socket.emit('authenticate',{tkn: this.extractToken()});
+            this._socket.emit('authenticate',{tkn: this._extractToken()});
             if(!reconnectPrepared){
               reconnectPrepared = true;
               this._socket.on('authenticated', ()=>{
@@ -71,7 +71,7 @@ export class SocketService {
   }
 
   public getSocketStatusStream(){
-    let observable = Observable.create( observer => {
+    let observable = BehaviorSubject.create( observer => {
       this._socket.on('disconnect', ()=>{
         observer.next(false);
       });
@@ -85,42 +85,51 @@ export class SocketService {
 
   public on(tag: string, fn: Function){
     this._socket.on(tag, fn);
-    return ()=>{
+    return () => {
       this._socket.removeListener(tag, fn);
     }
   }
 
-  public join(tags: Array<string>):Array<any> {
+  public join(tags: Array<string>): Array<any> {
     let fn;
     // set the update observable stream
-    let room = Observable.create( observer => {
-      this._socket.emit('room:join', tags);
-      fn = (data) => {
-        observer.next(data);
-      };
-      tags.forEach((tag)=>{
-        if(!this._rooms[tag] || this._rooms[tag].length == 0){
-          this._rooms[tag] = [];
-          this._socket.on(`${tag}:update`, this.handleRoomUpdate(tag))
-        }
-        this._rooms[tag].push(fn);
-      });
+    this._socket.emit('room:join', tags);
+    let rooms = {};
+    tags.forEach((tag)=>{
+      if(!this._rooms[tag]) {
+        this._rooms[tag] = {
+          subject: new BehaviorSubject('no initial value').filter(d=> d !== 'no initial value'),
+          length : 1
+        };
+        this._rooms[tag].subject.forceUpdate = ()=>{
+          this._socket.emit(`room:force`, [tag]);
+        };
+        rooms[tag] = this._rooms[tag].subject;
+        this._socket.on(`${tag}:update`, (data)=>{
+          if(this._rooms[tag]) this._rooms[tag].subject.next(data)
+          else console.info('left during update', this._rooms);
+        })
+      } else {
+        this._rooms[tag].length++;
+        rooms[tag] = this._rooms[tag].subject;
+      }
     });
 
     // return the update stream and close method
-    return [room, ()=>{
+    return [rooms, ()=>{
       tags.forEach((tag)=>{
-        this._rooms[tag].splice(this._rooms[tag].indexOf(fn), 1);
+        this._rooms[tag].length--;
         if(this._rooms[tag].length == 0){
           this._socket.emit('room:leave', tag);
           this._socket.removeAllListeners(`${tag}:update`)
+          delete this._rooms[tag];
         }
       });
     }];
   }
 
   public handleRoomUpdate(tag){
-    return (data)=>{
+    return (data) => {
       this._rooms[tag].forEach(function(fn){
         fn(data);
       });

@@ -27,6 +27,7 @@ export class ToastService {
   }
 
   getFields(input, field) {
+    debugger;
     return input.map(function(o) {
       return o[field];
     });

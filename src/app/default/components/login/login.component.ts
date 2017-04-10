@@ -28,7 +28,6 @@ export class LoginComponent {
   }
 
   submitForm(formData: any, valid: boolean) {
-    console.log(formData);
     if (valid) {
       let user = {
         email: formData.email,
@@ -38,6 +37,7 @@ export class LoginComponent {
       this.auth.login(user).subscribe(
         (result) => { this.hasBeenLogged.emit(true); },
         (err) => {
+          console.log(err);
           this._toast.popError(err.msgs);
         }
       ); // end subscribe

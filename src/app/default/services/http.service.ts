@@ -15,23 +15,6 @@ export class HttpService {
     return localStorage.getItem('tkn');
   }
 
-  private parseMeta(data){
-    if(data.meta.msgs.length > 0){
-      data.meta.msgs.forEach((msg)=>{
-        // 0: module, 1: type, 2: field, 3: id
-        let split = msg.msg.split('.');
-        data[split[1]] = data[split[1]] || [];
-        data[split[1]].push({
-          msg: msg.msg,
-          module: split[0],
-          field: split[2],
-          id: parseInt(split[3])
-        })
-      });
-    }
-    return data;
-  }
-
   private appendAuthorizationHeader(headers: Headers) {
     let tkn = this.extractTokenFromLocalStorage();
     headers.append('authorization', tkn);
@@ -39,8 +22,7 @@ export class HttpService {
   }
 
   private extractResponseObject(res:any) {
-    let data = this.parseMeta(res.json());
-    return { headers: res.headers, data: data}
+    return { headers: res.headers, data: res.json()}
   }
 
   private handleError(error:any): Observable<any> {

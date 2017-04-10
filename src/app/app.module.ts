@@ -102,18 +102,6 @@ import { RoutingModule } from './routing.module';
 })
 export class AppModule {
   constructor(private _auth: AuthService, private _language: LanguageService) {
-    this._auth.pingAuth().subscribe(
-      (data)=> {
-        if (!data) {
-          this._language.autoDetectLanguage();
-        } else {
-          this._language.setLanguage(data.settings.language);
-          //this._ns.init();
-          //if(this._router.url == "/home") {
-          //  this._router.navigate(['/profile']);
-          //}
-        }
-      }
-    );
+    this._language.autoDetectLanguage();
   }
 }

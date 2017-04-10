@@ -1,5 +1,5 @@
 import { Component, OnInit, NgZone } from '@angular/core';
-
+import { AuthService } from  '../services/auth.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -21,11 +21,26 @@ export class AppComponent implements OnInit {
   private _closeOnClickOutside: boolean = false;
   private _modeNum: number = 0;
 
-  constructor(private _zone: NgZone) {
+  constructor(private _zone: NgZone, private _auth: AuthService) {
     this.enableResponsive();
+    /*this._auth.pingAuth().subscribe(
+      (data)=> {
+        if (!data) {
+          this._language.autoDetectLanguage();
+        } else {
+          this._language.setLanguage(data.settings.language);
+          //this._ns.init();
+          //if(this._router.url == "/home") {
+          //  this._router.navigate(['/profile']);
+          //}
+        }
+      }
+    );*/
   }
 
   ngOnInit() { }
+
+
 
   private _toggleSidebar() {
     this._opened = !this._opened;

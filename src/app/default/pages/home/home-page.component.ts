@@ -10,6 +10,10 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit() { }
 
+  handleState(data:any) {
+    console.log(data);
+  }
+
   navigateToForgot() {
     this.router.navigate(['/forgot']);
   }
